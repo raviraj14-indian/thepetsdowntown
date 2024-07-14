@@ -1,0 +1,186 @@
+
+[21/05, 7:59 pm] Dhruv Raj: Pet parent 
+1. Mobile (unique)
+2. 2 Names mandatory optional
+3. Address 
+4. Alternate optional Number mandatory
+
+Pet details
+1. name 
+2. age
+3. Breed
+4. Gender
+5. Sterilization
+6. Vaccination records (mandatory photo upload)
+7. Deworming status
+8. Anti tick
+9. Diet admission
+10. Medical history
+11. Previous boarding experience. Yes no. 
+12.
+[21/05, 8:08 pm] Dhruv Raj: Billing
+1. 6,7,8,9,10,11 from above
+2. Boarding time
+3. Release time
+4. Daycare charge 
+5. Boarding charge 
+6. Discount for both
+
+
+========================================
+
+Owner:
+	id (uuid)
+	phone: string (unique, index)
+	alternate_phone: string (mandatory)
+	primary_name: 
+	alternate_name: string
+	address
+
+	def get_all_reservations():
+		return []
+
+
+CRUD owner
+
+========================================
+
+Pet:
+	id: uuid
+	owner_id: FK
+	name: string
+	breed_name: string
+	age: int
+	gender: M/F
+	is_sterilized: bool
+
+
+BoardingPets / Reservation:
+	pet_id
+	owner_id
+	deworming_status: bool
+	vaccination_record: file blob
+	anti_tick: bool
+	diet: TextField
+	previous_boarding TextField
+	existing_injury: textField
+	start_date: timestamp
+	end_date: timestamp
+
+
+Reservation:
+	reservation_id (idempotency key)
+	# reservation_type
+	owner_id
+	pet_id: JSON (rationale is that the owner can leave multiple pets, each pet can have their own charges)
+	start_date timestamp
+	end_date timestamp
+
+
+	def get_vaccination_records():
+		return
+
+	def get_medical_history():
+		return
+
+	def get_all_reservations():
+		return
+
+
+Billing:
+	pet_id
+	owner_id
+	reservation_id
+	day_count: int
+	hours_count: int
+	daycare_charge: int
+	boarding_charge: int
+	discount: int
+	amount: int
+	#gst
+	#total_amount
+
+
+
+====================================
+
+"""
+NOT NEEDED
+class ReservationHistory:
+	pet_id: 
+	owner_id:
+	start_date:
+	end_date:
+	bill:
+"""
+
+
+====================================
+
+What is the total capacity or the number of dogs that the stay can afford.?
+Will the capacity change with time? Will the capacity be based on the breed of the dog?
+For ex. breeds like Great Dane require more space. so as per breed, the 
+This in itself is reservation history, separate table not needed
+
+
+
+===================================
+
+This table will be prepopulated for 2 years in the DB.
+This would allow admin to change the rate for a given day
+This Rate API will be available only for the admins.
+
+StayRate: (the rate of the stay can be based on dog breed, list any other factors)
+	breed_id
+	stay_rate_id
+	rate
+	date
+
+==================================
+
+What payment options are supported?
+Credit card, debit card.?
+Since the application is small, I'd recommend to just use the QR code to accept payments.
+Customers can scan the QR code and make payments. Please note we're just using QR code image, there will be no integration between our system and the UPI system.
+admin will have to manually update reservation status if paid, refunded or canceled in the 1st iteration.
+As the application grows, the admin/client can think of improvements and support multiple payment options and leverage PSP's in the subsequent versions of the application.
+
+
+==================================
+
+
+======================================
+
+NOT NEEDED
+
+BreedSize(Enum):
+	SMALL
+	MEDIUM
+	LARGE
+
+
+Breed:
+	breed_id
+	breed_name
+	breed_size
+
+=====================================
+
+NOT NEEDED
+
+RecordType(Enum)
+	VACCINATION_RECORD
+	MEDICAL_HISTORY
+
+
+Records:
+	record_id
+	record_type
+	pet_id (None)
+	owner_id required
+	file_blob (if not using s3)
+	file_url (if not using file blob)
+
+
+=====================================
+

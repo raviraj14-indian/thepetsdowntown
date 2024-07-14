@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/dhruv0711/pet_staycation/api"
 	"github.com/dhruv0711/pet_staycation/models"
@@ -21,8 +22,6 @@ func main() {
 	// Create a new Gin router
 	router := gin.Default()
 
-	// Middlewares
-
 	router.GET("/login", api.Login)
 	router.POST("/login", api.HandleLogin)
 
@@ -36,6 +35,17 @@ func main() {
 	router.GET("/owners", api.GetAllOwners)
 	router.GET("/owner-identification/:id", api.GetOwnerIdentity)
 
+	router.POST("/reservation", api.AddReservation)
+	router.PUT("/reservation/:id", api.UpdateReservation)
+	router.GET("/reservation/:id", api.GetReservationByID)
+	router.GET("/reservations", api.GetReservations)
+
+	router.POST("/billing", api.AddBilling)
+	router.GET("/billing/:id", api.GetBilling)
+
+	router.GET("/home", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "./client/dist/index.html", gin.H{})
+	})
 	// Run the server on port 8080
 	router.Run(":8080")
 }
