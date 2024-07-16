@@ -3,13 +3,56 @@ package main
 import (
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/dhruv0711/pet_staycation/api"
 	"github.com/dhruv0711/pet_staycation/models"
+	"github.com/dhruv0711/pet_staycation/utils"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
+
+func authenticate() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		authHeader := c.Request.Header.Get("Authorization")
+		if authHeader == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"message": "no authentication header found",
+			})
+			c.Abort()
+			return
+		}
+
+		seperatedHeader := strings.Split(authHeader, " ")
+		if len(seperatedHeader) != 2 {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"message": "invalid authentication header",
+			})
+			c.Abort()
+			return
+		}
+
+		valid, err := utils.ValidToken(seperatedHeader[1])
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"message": "invalid token",
+			})
+			c.Abort()
+			return
+		}
+
+		if !valid {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"message": "invalid token",
+			})
+			c.Abort()
+			return
+		}
+
+		c.Next()
+	}
+}
 
 func main() {
 	db, err := sqlx.Connect("mysql", "root:password@tcp(localhost:3306)/tpd")
@@ -21,6 +64,9 @@ func main() {
 
 	// Create a new Gin router
 	router := gin.Default()
+
+	// Middlewares
+	router.Use(authenticate())
 
 	router.GET("/login", api.Login)
 	router.POST("/login", api.HandleLogin)
@@ -43,9 +89,8 @@ func main() {
 	router.POST("/billing", api.AddBilling)
 	router.GET("/billing/:id", api.GetBilling)
 
-	router.GET("/home", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "./client/dist/index.html", gin.H{})
-	})
+	router.GET("/old-data", api.GetOldData)
+
 	// Run the server on port 8080
 	router.Run(":8080")
 }
