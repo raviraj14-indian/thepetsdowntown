@@ -1,0 +1,746 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
+    "version": "1.0.7",
+    "title": "Pune Petstaycation",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "dhruvraj0711@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "petstaycation-pune.swagger.io",
+  "basePath": "/v2",
+  "tags": [
+    {
+      "name": "Pet",
+      "description": "Everything about your Pets",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "http://swagger.io"
+      }
+    },
+    {
+      "name": "Pet Owner",
+      "description": "CRUD operations of Pet Owner",
+      "externalDocs": {
+        "description": "Find out more about our store",
+        "url": "http://swagger.io"
+      }
+    },
+    {
+      "name": "Reservation",
+      "description": "Reservation details",
+      "externalDocs": {
+        "description": "blah",
+        "url": "http://swagger.io"
+      }
+    },
+    {
+      "name": "Billing",
+      "description": "Billing details",
+      "externalDocs": {
+        "description": "blah",
+        "url": "http://swagger.io"
+      }
+    }
+  ],
+
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+
+    "/billing": {
+      "post": {
+        "tags": ["Billing"],
+        "summary": "Billing details",
+        "description": "",
+        "operationId": "createBilling",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Create billing for reservation",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Billing"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+
+
+    "/reservations": {
+      "post": {
+        "tags": ["Reservation"],
+        "summary": "Create reservation of a pet",
+        "description": "",
+        "operationId": "createReservation",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Create a new reservation for petId",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Reservation"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Reservation created",
+            "schema": {
+              "$ref": "#/definitions/Reservation"
+            }
+          },
+          "400": {
+            "description": "Bad request... Owner not found, pet not found etc."
+          }
+        }
+    },
+    "get": {
+      "tags": ["Reservation"],
+      "summary": "Filter reservations",
+      "description": "",
+      "operationId": "getReservations",
+      "consumes": [
+        "application/json",
+        "application/xml"
+      ],
+      "produces": [
+        "application/json",
+        "application/xml"
+      ],
+      "parameters": [
+        {
+          "in": "query",
+          "name": "status",
+          "description": "Reservations filtered by status",
+          "type": "string",
+          "default": "live"
+        },
+        {
+          "in": "query",
+          "name": "ownerId",
+          "description": "Reservations filtered by owner",
+          "type": "string"
+        },
+        {
+          "in": "query",
+          "name": "petId",
+          "description": "Reservations filtered by pet",
+          "type": "string"
+        },
+        {
+          "in": "query",
+          "name": "startDate",
+          "description": "Reservations filtered by start date",
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "in": "query",
+          "name": "endDate",
+          "description": "Reservations filtered by end date",
+          "type": "string",
+          "format": "date-time"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "successful operation",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Reservation"
+            }
+          }
+        },
+        "400": {
+          "description": "Invalid status value"
+        }
+      }
+      }
+    },
+
+    "/reservations/{reservationId}": {
+      "get": {
+        "tags": ["Reservation"],
+        "summary": "Get reservation of a pet",
+        "description": "",
+        "operationId": "getReservation",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservationId",
+            "description": "reservation that needs to be updated",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "$ref": "#/definitions/Reservation"
+            }
+          },
+          "404": {
+            "description": "Reservation not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+    },
+      "put": {
+        "tags": ["Reservation"],
+        "summary": "Update reservation of a pet",
+        "description": "",
+        "operationId": "updateReservation",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservationId",
+            "description": "reservation that needs to be updated",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Update reservation for petId",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Reservation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reservation updated",
+            "schema": {
+              "$ref": "#/definitions/Reservation"
+            }
+          },
+          "404": {
+            "description": "Reservation not found"
+          },
+          "400": {
+            "description": "Bad request... Owner not found, pet not found etc."
+          }
+        }
+    }
+    },
+
+
+    "/pets": {
+      "post": {
+        "tags": [
+          "Pet"
+        ],
+        "summary": "Add a new pet for the owner",
+        "description": "",
+        "operationId": "addPet",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Pet object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Pet created",
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Owner not found"
+          }
+        }}},
+
+    "/petowner/{phone}": {
+      "get": {
+        "tags": [
+          "Pet Owner"
+        ],
+        "summary": "Get petowner by phone",
+        "description": "",
+        "operationId": "getPetOwnerByPrimaryPhone",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "phone",
+            "in": "path",
+            "description": "The name that needs to be fetched. Use user1 for testing. ",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/PetOwner"
+            }
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+
+    "/petowner/{phone}/uploadDocuments": {
+      "post": {
+        "tags": [
+          "Pet Owner"
+        ],
+        "summary": "uploads document for ex. aadhar",
+        "description": "",
+        "operationId": "uploadFile",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "phone",
+            "in": "path",
+            "description": "phone of the pet owner",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file to upload",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+            }
+          }
+        }
+      },
+
+    "/petowner": {
+      "post": {
+        "tags": [
+          "Pet Owner"
+        ],
+        "summary": "Create petowner",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "createPetOwner",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created Pet owner object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PetOwner"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "PetOwner created",
+            "schema": {
+              "$ref": "#/definitions/PetOwner"
+            }
+          },
+          "400": {
+            "description": "User already exists with phone"
+          }
+        }
+      }
+    },
+
+    "/petowner/{phone}/pets": {
+      "get": {
+        "tags": [
+          "Pet Owner"
+        ],
+        "summary": "Get all pets of the owner",
+        "description": "",
+        "operationId": "getPetsOfPetOwnerByPrimaryPhone",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "phone",
+            "in": "path",
+            "description": "The name that needs to be fetched. Use user1 for testing. ",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Pet"
+            }
+            }
+          },
+          "400": {
+            "description": "Invalid username supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    }
+  },
+
+  "definitions": {
+
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+
+    "Billing": {
+      "type": "object",
+      "required": [
+        "petId",
+        "ownerId",
+        "reservationId"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "petId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "ownerId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "reservationId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "dayCount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "hourCount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "dayCareCharges": {
+          "type": "number",
+          "format": "float"
+        },
+        "boardingCharges": {
+          "type": "number",
+          "format": "float"
+        },
+        "discount": {
+          "type": "number",
+          "format": "float"
+        },
+        "amount": {
+          "type": "number",
+          "format": "float"
+        },
+        "gst": {
+          "type": "number",
+          "format": "float"
+        },
+        "totalAmount": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+
+
+    "Pet": {
+      "type": "object",
+      "required": [
+        "name",
+        "photoUrls",
+        "ownerId"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "ownerId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string",
+          "example": "musk"
+        },
+        "breedName": {
+          "type": "string",
+          "example": "labrador"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "gender": {
+          "type": "string",
+          "example": "male",
+          "enum": [
+            "male",
+            "female"
+          ]
+        }
+      },
+      "xml": {
+        "name": "Pet"
+      }
+    },
+
+    "Reservation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "petId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "ownerId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "dewormingStatus": {
+          "type": "boolean"
+        },
+        "vaccinationRecord": {
+          "type": "string"
+        },
+        "antiTick": {
+          "type": "boolean"
+        },
+        "diet": {
+          "type": "string"
+        },
+        "previousBoardings": {
+          "type": "string"
+        },
+        "existingInjuries": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "description": "Reservation status",
+          "enum": [
+            "live",
+            "pending",
+            "completed",
+            "canceled"
+          ]
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "xml": {
+        "name": "Reservation"
+      }
+    },
+
+    "ReservationResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "pet": {
+          "type": "object",
+          "$ref": "#/definitions/Pet"
+        },
+        "ownerId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "dewormingStatus": {
+          "type": "boolean"
+        },
+        "vaccinationRecord": {
+          "type": "string"
+        },
+        "antiTick": {
+          "type": "boolean"
+        },
+        "diet": {
+          "type": "string"
+        },
+        "previousBoardings": {
+          "type": "string"
+        },
+        "existingInjuries": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "description": "Reservation status",
+          "enum": [
+            "live",
+            "pending",
+            "completed",
+            "canceled"
+          ]
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "xml": {
+        "name": "Reservation"
+      }
+    },
+
+    "PetOwner": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "alternatePhone": {
+          "type": "string"
+        },
+        "primaryName": {
+          "type": "string"
+        },
+        "alternateName": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "PetOwner"
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
